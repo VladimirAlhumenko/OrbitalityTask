@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,6 +30,8 @@ public class Planet : MonoBehaviour
     public bool IsPlayer { get; set; }
     public float Radius { get => _radius; set => _radius = value; }
 
+    public Rocket Rocket { get; set; }
+
     public void Init(Vector2 planetСenter, Color color, float radius, float rotationSpeed, bool isPlayer, Planet satelite = null)
     {
         _renderer = GetComponent<Renderer>();
@@ -37,13 +40,19 @@ public class Planet : MonoBehaviour
         transform.position = (transform.position - _center).normalized * radius + _center;
         _radius = radius;
         _rotationSpeed = rotationSpeed;
+        IsPlayer = isPlayer;
 
         _renderer.material.color = color;
 
         _hud.UpdateSlider(isPlayer);
     }
 
-    void Update()
+    private void OnMouseDown()
+    {
+        
+    }
+
+    private void Update()
     {
         transform.RotateAround(_center, axis, _rotationSpeed * Time.deltaTime);
         desiredPosition = (transform.position - _center).normalized * _radius + _center;

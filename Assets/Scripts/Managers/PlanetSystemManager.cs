@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-public class PlanetSystemManager : MonoBehaviour
+public class PlanetSystemManager : Singleton<PlanetSystemManager>
 {
     [SerializeField]
     private Planet _planetPrefab;
@@ -29,6 +29,8 @@ public class PlanetSystemManager : MonoBehaviour
     {
         CreatePlanets();
         СreatePlanetRoads();
+
+        EventManager.SendEvent("OnPlanetsInited",planets);
     }
 
     private void СreatePlanetRoads()
@@ -45,11 +47,13 @@ public class PlanetSystemManager : MonoBehaviour
     {
         planets.Add(_sun);
 
+        var randomPlayerIndex = UnityEngine.Random.Range(1, _playersCount);
+
         for (int i = 1; i <= _playersCount; i++)
         {
             var prevPlanet = planets[i - 1];
 
-            var isPlayer = i == 1;
+            var isPlayer = i == randomPlayerIndex;
             var newPlanetPosition = new Vector3(prevPlanet.transform.position.x,_sun.transform.position.y + prevPlanet.transform.position.y + prevPlanet.GetComponent<SphereCollider>().radius + _planetsDistance, _sun.transform.position.z);
             var newPlanetRadiusFromCentre = prevPlanet.Radius + _planetsDistance;
             var newPlanetRandomSpeed = UnityEngine.Random.Range(20, 100);

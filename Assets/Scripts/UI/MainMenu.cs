@@ -1,18 +1,44 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private Button _startNewGameButton;
+
+    [SerializeField]
+    private Button _loadGameButton;
+
+    [SerializeField]
+    private Button _exit;
+
+    private void OnEnable()
+    {
+        _startNewGameButton.onClick.AddListener(StartGame);
+        _loadGameButton.onClick.AddListener(Load);
+        _exit.onClick.AddListener(Exit);
+    }
+
+    private void OnDisable()
+    {
+        _startNewGameButton.onClick.RemoveListener(StartGame);
+        _loadGameButton.onClick.RemoveListener(Load);
+        _exit.onClick.RemoveListener(Exit);
+    }
+
+    private void StartGame()
+    {
+        SceneHelper.LoadScene(Scenes.Game);
+    }
+
+    private void Load()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Exit()
     {
-        
+       
     }
 }

@@ -19,6 +19,8 @@ public class HUD : MonoBehaviour
         if (isPlayer)
         {
             _playerSlider.gameObject.SetActive(true);
+
+            return;
         }
 
         _enemySlider.gameObject.SetActive(true);
