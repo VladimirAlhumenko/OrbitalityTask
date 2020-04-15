@@ -13,6 +13,11 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _cooldownText;
 
+    private void Start()
+    {
+        _shotingButton.interactable = false;
+    }
+
     private void OnEnable()
     {
         EventManager.Subscribe("OnPlayerRocketCooldownDone",OnCooldownDone);
@@ -20,6 +25,13 @@ public class PlayerHUD : MonoBehaviour
         _shotingButton.onClick.AddListener(Shoot);
 
         EventManager.Subscribe("StartCooldown", StartTimer);
+
+        EventManager.Subscribe("OnPlanetSelected", ActiveShootButton);
+    }
+
+    private void ActiveShootButton(object[] arg0)
+    {
+        _shotingButton.interactable = true;
     }
 
     private void OnDisable()
@@ -29,6 +41,8 @@ public class PlayerHUD : MonoBehaviour
         _shotingButton.onClick.RemoveListener(Shoot);
 
         EventManager.Unsubscribe("StartCooldown", StartTimer);
+
+        EventManager.Unsubscribe("OnPlanetSelected", ActiveShootButton);
     }
 
 

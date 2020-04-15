@@ -42,8 +42,9 @@ public class Planet : MonoBehaviour
             health = value;
         }
     }
-    public Rocket Rocket { get; set; }
+
     public HUD Hud { get => _hud; set => _hud = value; }
+    public float RotationSpeed { get => _rotationSpeed; set => _rotationSpeed = value; }
 
     public void Init(Vector2 planetСenter, Color color, float radius, float rotationSpeed, bool isPlayer, Planet satelite = null)
     {
@@ -57,7 +58,21 @@ public class Planet : MonoBehaviour
 
         _renderer.material.color = color;
 
-        _hud.UpdateSlider(isPlayer);
+        _hud.EnableSlider(isPlayer);
+    }
+
+    public void TakeDamage(int amount)
+    {
+        Health -= amount;
+
+        if(Health <= 0)
+        {
+            EventManager.SendEvent("PlanetDestroyed",this);
+
+            Destroy(gameObject);
+        }
+
+        Hud.UpdateSlider(amount);
     }
 
     private void Update()
@@ -72,10 +87,5 @@ public class Planet : MonoBehaviour
         if (IsPlayer) return;
 
         EventManager.SendEvent("OnPlanetSelected",this);
-    }
-
-    private void TakeDamage(int amount)
-    {
-        Health -= amount;
     }
 }

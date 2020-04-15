@@ -14,8 +14,12 @@ namespace Models
         [SerializeField]
         private int speed;
 
+        [SerializeField]
+        private int lifetime;
         public int Damage { get => damage; set => damage = value; }
         public int Cooldown { get => cooldown; set => cooldown = value; }
         public int Speed { get => speed; set => speed = value; }
+
+        public int LifeTime { get => lifetime; set => lifetime = value; }
     }
 }

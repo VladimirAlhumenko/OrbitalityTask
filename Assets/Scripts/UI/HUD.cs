@@ -19,7 +19,7 @@ public class HUD : MonoBehaviour
         _arrow.gameObject.SetActive(isEnable);
     }
 
-    public void UpdateSlider(bool isPlayer)
+    public void EnableSlider(bool isPlayer)
     {
         _playerSlider.gameObject.SetActive(false);
         _enemySlider.gameObject.SetActive(false);
@@ -32,5 +32,11 @@ public class HUD : MonoBehaviour
         }
 
         _enemySlider.gameObject.SetActive(true);
+    }
+
+    public void UpdateSlider(int value)
+    {
+        _playerSlider.value = value;
+        _enemySlider.value = value;
     }
 }

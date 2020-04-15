@@ -23,14 +23,39 @@ public class PlanetSystemManager : Singleton<PlanetSystemManager>
     private void OnEnable()
     {
         EventManager.Subscribe("OnPlanetSelected", SelectPlayer);
+
+        EventManager.Subscribe("OnRocketCollited", TakePlanetDamage);
+
+        EventManager.Subscribe("PlanetDestroyed", RemovePlanet);
+    }
+
+    private void RemovePlanet(object[] arg0)
+    {
+        var planet = arg0[0] as Planet;
+
+        planets.Remove(planet);
     }
 
     private void OnDisable()
     {
         EventManager.Unsubscribe("OnPlanetSelected", SelectPlayer);
+
+        EventManager.Unsubscribe("OnRocketCollited", TakePlanetDamage);
+
+        EventManager.Unsubscribe("PlanetDestroyed", RemovePlanet);
     }
 
-    private void Start()
+    private void TakePlanetDamage(object[] args)
+    {
+        var planet = args[0] as Planet;
+        var rocketDamage = (int)args[1];
+
+        var damagedPlanet = planets.Find(x => x.gameObject.name == planet.name);
+
+        damagedPlanet.TakeDamage(rocketDamage);
+    }
+
+    public void Init()
     {
         CreateSolarSystem();
     }
@@ -121,6 +146,6 @@ public class PlanetSystemManager : Singleton<PlanetSystemManager>
         var selectedPlanet = planets.Find(x => x == player);
 
         if (selectedPlanet != null)
-            selectedPlanet.Hud.EnableArrow(true);
+            selectedPlanet.Hud.EnableArrow(true);      
     }
 }

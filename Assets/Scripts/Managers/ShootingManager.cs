@@ -9,7 +9,7 @@ public class ShootingManager : Singleton<ShootingManager>
     [SerializeField]
     private Models.Rocket[] _rockets;
 
-    private Dictionary<Planet,Models.Rocket> _playersRockets = new Dictionary<Planet, Models.Rocket>();
+    private Dictionary<Planet,Models.Rocket> _shootingPlanets = new Dictionary<Planet, Models.Rocket>();
 
     private Planet _selectedPlanet;
 
@@ -18,13 +18,17 @@ public class ShootingManager : Singleton<ShootingManager>
 
     public float shootAngle = 30;
 
+    private float power = 2;
+
     private void OnPlayerShoot(object[] arg0)
     {
-        var rocket = _playersRockets.Single(x => x.Key.IsPlayer == true);
+        var player = _shootingPlanets.Single(x => x.Key.IsPlayer == true);
 
-        Shoot(new Vector2(rocket.Key.transform.position.x, rocket.Key.transform.position.y + rocket.Key.GetComponent<SphereCollider>().radius + 1), _selectedPlanet.transform);
+        var rocketSpawnPosition = new Vector2(player.Key.transform.position.x, player.Key.transform.position.y + player.Key.GetComponent<SphereCollider>().radius + 1);
 
-        StartCoroutine(Cooldown(rocket.Value.Cooldown));
+        Shoot(rocketSpawnPosition, _selectedPlanet.transform,player.Value);
+
+        StartCoroutine(Cooldown(player.Value.Cooldown));
     }
 
     private IEnumerator Cooldown(int cooldowm)
@@ -43,6 +47,16 @@ public class ShootingManager : Singleton<ShootingManager>
         EventManager.Subscribe("OnPlanetsInited",InitRockets);
 
         EventManager.Subscribe("OnPlanetSelected",SelectPlanet);
+
+        EventManager.Subscribe("PlanetDestroyed", RemovePlanet);
+    }
+
+    private void RemovePlanet(object[] arg0)
+    {
+        var planet = arg0[0] as Planet;
+
+        _selectedPlanet = null;
+        _shootingPlanets.Remove(planet);
     }
 
     private void OnDisable()
@@ -52,6 +66,8 @@ public class ShootingManager : Singleton<ShootingManager>
         EventManager.Unsubscribe("OnPlanetsInited", InitRockets);
 
         EventManager.Unsubscribe("OnPlanetSelected", SelectPlanet);
+
+        EventManager.Unsubscribe("PlanetDestroyed", RemovePlanet);
     }
 
     private void InitRockets(object[] arg0)
@@ -62,7 +78,7 @@ public class ShootingManager : Singleton<ShootingManager>
         {
              var rocket = GetRandomRocket();
 
-            _playersRockets.Add(planet,rocket);
+            _shootingPlanets.Add(planet,rocket);
         }
     }
 
@@ -80,11 +96,21 @@ public class ShootingManager : Singleton<ShootingManager>
         return vel * dir.normalized;
     }
 
-    private void Shoot(Vector2 planetPosition,Transform targetPlanetPosition)
+    private void Shoot(Vector3 planetPosition,Transform targetPlanetPosition,Models.Rocket rocketProperties)
     {
         var rocket = Instantiate(_rocketPrefab, planetPosition, Quaternion.identity);
-         rocket.GetComponent<Rigidbody>().velocity = CalculateParabolTrajectory(planetPosition,targetPlanetPosition, shootAngle);
-        Destroy(rocket.gameObject, 10);
+        //    rocket.GetComponent<Rigidbody>().velocity = CalculateParabolTrajectory(planetPosition,targetPlanetPosition, shootAngle);
+
+        rocket.GetComponent<Rocket>().RocketProperties = rocketProperties;
+
+        rocket.GetComponent<Rigidbody>().AddForce(GetForceFrom(planetPosition, targetPlanetPosition.position), ForceMode.Impulse);
+
+        Destroy(rocket.gameObject, 5);
+    }
+
+    private Vector2 GetForceFrom(Vector3 fromPos, Vector3 toPos)
+    {
+        return (new Vector2(toPos.x, toPos.y) - new Vector2(fromPos.x, fromPos.y)) * power;
     }
 
     private void SelectPlanet(object[] arg0)
