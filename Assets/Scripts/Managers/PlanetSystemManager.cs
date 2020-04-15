@@ -20,6 +20,16 @@ public class PlanetSystemManager : Singleton<PlanetSystemManager>
 
     private const float _planetsDistance = 1.5f;
 
+    private void OnEnable()
+    {
+        EventManager.Subscribe("OnPlanetSelected", SelectPlayer);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Unsubscribe("OnPlanetSelected", SelectPlayer);
+    }
+
     private void Start()
     {
         CreateSolarSystem();
@@ -30,7 +40,7 @@ public class PlanetSystemManager : Singleton<PlanetSystemManager>
         CreatePlanets();
         СreatePlanetRoads();
 
-        EventManager.SendEvent("OnPlanetsInited",planets);
+        EventManager.SendEvent("OnPlanetsInited", planets);
     }
 
     private void СreatePlanetRoads()
@@ -54,7 +64,7 @@ public class PlanetSystemManager : Singleton<PlanetSystemManager>
             var prevPlanet = planets[i - 1];
 
             var isPlayer = i == randomPlayerIndex;
-            var newPlanetPosition = new Vector3(prevPlanet.transform.position.x,_sun.transform.position.y + prevPlanet.transform.position.y + prevPlanet.GetComponent<SphereCollider>().radius + _planetsDistance, _sun.transform.position.z);
+            var newPlanetPosition = new Vector3(prevPlanet.transform.position.x, _sun.transform.position.y + prevPlanet.transform.position.y + prevPlanet.GetComponent<SphereCollider>().radius + _planetsDistance, _sun.transform.position.z);
             var newPlanetRadiusFromCentre = prevPlanet.Radius + _planetsDistance;
             var newPlanetRandomSpeed = UnityEngine.Random.Range(20, 100);
 
@@ -62,6 +72,8 @@ public class PlanetSystemManager : Singleton<PlanetSystemManager>
 
             planets.Add(planet);
         }
+
+        planets.Remove(_sun);
     }
 
     private Planet CreatePlanet(Vector3 position, float radius, float speed, Color color, bool isPlayer, bool isSateliteAvailable)
@@ -95,5 +107,20 @@ public class PlanetSystemManager : Singleton<PlanetSystemManager>
         }
 
         return null;
+    }
+
+    private void SelectPlayer(object[] arg0)
+    {
+        var player = arg0[0] as Planet;
+
+        foreach (var planet in planets)
+        {
+            planet.Hud.EnableArrow(false);
+        }
+
+        var selectedPlanet = planets.Find(x => x == player);
+
+        if (selectedPlanet != null)
+            selectedPlanet.Hud.EnableArrow(true);
     }
 }

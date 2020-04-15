@@ -11,6 +11,14 @@ public class HUD : MonoBehaviour
     [SerializeField]
     private Slider _enemySlider;
 
+    [SerializeField]
+    private Image _arrow;
+
+    public void EnableArrow(bool isEnable)
+    {
+        _arrow.gameObject.SetActive(isEnable);
+    }
+
     public void UpdateSlider(bool isPlayer)
     {
         _playerSlider.gameObject.SetActive(false);

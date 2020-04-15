@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Road : MonoBehaviour
 {
-    private int segments = 50;
+    private int segments = 80;
 
     private float xradius = 5;
 
