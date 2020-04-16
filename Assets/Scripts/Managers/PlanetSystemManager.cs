@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Assets.Scripts.Abstraction;
+using Assets.Scripts.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-public class PlanetSystemManager : Singleton<PlanetSystemManager>
+public class PlanetSystemManager : Singleton<PlanetSystemManager>,ISavedData<List<PlanetModel>>
 {
     [SerializeField]
     private Planet _planetPrefab;
@@ -147,5 +149,24 @@ public class PlanetSystemManager : Singleton<PlanetSystemManager>
 
         if (selectedPlanet != null)
             selectedPlanet.Hud.EnableArrow(true);      
+    }
+
+    public List<PlanetModel> GetData()
+    {
+        var planetsModels = new List<PlanetModel>();
+
+        foreach (var planet in planets)
+        {
+            var planetModel = new PlanetModel()
+            {
+                Position = planet.transform.position,
+                Radius = planet.Radius,
+                RotationSpeed = planet.RotationSpeed
+            };
+
+            planetsModels.Add(planetModel);
+        }
+
+        return planetsModels;
     }
 }

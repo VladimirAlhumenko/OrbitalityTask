@@ -38,11 +38,11 @@ public class PauseMenu : MonoBehaviour
 
     private void Save()
     {
-
+        EventManager.SendEvent("OnSaveButtonClicked");
     }
 
     private void Exit()
     {
-
+        
     }
 }

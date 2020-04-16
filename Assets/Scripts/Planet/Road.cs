@@ -21,10 +21,11 @@ public class Road : MonoBehaviour
 
         line.positionCount = (segments + 1);
         line.useWorldSpace = false;
+
         CreatePoints();
     }
 
-    void CreatePoints()
+    private void CreatePoints()
     {
         float x;
         float y;

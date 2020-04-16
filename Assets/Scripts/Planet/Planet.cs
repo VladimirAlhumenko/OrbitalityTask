@@ -52,8 +52,8 @@ public class Planet : MonoBehaviour
 
         _center = planetСenter;
         transform.position = (transform.position - _center).normalized * radius + _center;
-        _radius = radius;
-        _rotationSpeed = rotationSpeed;
+        Radius = radius;
+        RotationSpeed = rotationSpeed;
         IsPlayer = isPlayer;
 
         _renderer.material.color = color;
@@ -77,8 +77,8 @@ public class Planet : MonoBehaviour
 
     private void Update()
     {
-        transform.RotateAround(_center, axis, _rotationSpeed * Time.deltaTime);
-        desiredPosition = (transform.position - _center).normalized * _radius + _center;
+        transform.RotateAround(_center, axis, RotationSpeed * Time.deltaTime);
+        desiredPosition = (transform.position - _center).normalized * Radius + _center;
         transform.position = Vector3.MoveTowards(transform.position, desiredPosition, Time.deltaTime * radiusSpeed);
     }
 

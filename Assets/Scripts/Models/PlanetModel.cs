@@ -8,9 +8,12 @@ using UnityEngine;
 namespace Assets.Scripts.Models
 {
     [Serializable]
-    class PlanetModel
+    public class PlanetModel
     {
         public Vector3 Position { get; set; }
 
+        public float Radius { get; set; }
+
+        public float RotationSpeed { get; set; }
     }
 }
