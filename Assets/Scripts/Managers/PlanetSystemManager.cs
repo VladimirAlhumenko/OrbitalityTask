@@ -100,6 +100,7 @@ public class PlanetSystemManager : Singleton<PlanetSystemManager>,ISavedData<Lis
             planets.Add(planet);
         }
 
+        Destroy(_sun);
         planets.Remove(_sun);
     }
 
@@ -161,7 +162,8 @@ public class PlanetSystemManager : Singleton<PlanetSystemManager>,ISavedData<Lis
             {
                 Position = planet.transform.position,
                 Radius = planet.Radius,
-                RotationSpeed = planet.RotationSpeed
+                RotationSpeed = planet.RotationSpeed,
+                Rocket = planet.Rocket
             };
 
             planetsModels.Add(planetModel);

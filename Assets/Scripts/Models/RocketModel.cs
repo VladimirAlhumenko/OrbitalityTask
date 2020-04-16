@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Models
 {
     [Serializable]
-    public class Rocket
+    public class RocketModel
     {
         [SerializeField]
         private int damage;

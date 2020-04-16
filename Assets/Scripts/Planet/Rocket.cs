@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Rocket : MonoBehaviour
 {
-    public Models.Rocket RocketProperties { get; set; }
+    public Models.RocketModel RocketProperties { get; set; }
 
     public void OnCollisionEnter(Collision collision)
     {

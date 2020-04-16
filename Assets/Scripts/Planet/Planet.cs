@@ -27,24 +27,14 @@ public class Planet : MonoBehaviour
 
     private Renderer _renderer;
 
-    private int health = 100;
-
     public bool IsPlayer { get; set; }
     public float Radius { get => _radius; set => _radius = value; }
-    public int Health
-    {
-        get => health;
-
-        set
-        {
-
-
-            health = value;
-        }
-    }
+    public int Health { get; set; } = 100;
 
     public HUD Hud { get => _hud; set => _hud = value; }
     public float RotationSpeed { get => _rotationSpeed; set => _rotationSpeed = value; }
+
+    public Models.RocketModel Rocket { get; set; }
 
     public void Init(Vector2 planetСenter, Color color, float radius, float rotationSpeed, bool isPlayer, Planet satelite = null)
     {

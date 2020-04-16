@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,7 @@ namespace Assets.Scripts.Models
         public float Radius { get; set; }
 
         public float RotationSpeed { get; set; }
+
+        public RocketModel Rocket { get; set; }
     }
 }

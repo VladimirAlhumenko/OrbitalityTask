@@ -1,7 +1,8 @@
 ﻿using Newtonsoft.Json;
+using System.IO;
 using UnityEngine;
 
-public class DataManager : Singleton<DataManager>
+public class SaveManager : Singleton<SaveManager>
 {
     [SerializeField]
     private PlanetSystemManager planetSystemManager;
@@ -20,11 +21,15 @@ public class DataManager : Singleton<DataManager>
     {
         var planets = planetSystemManager.GetData();
 
-        var json = JsonConvert.SerializeObject(planets);
-    }
+        var json = JsonConvert.SerializeObject(planets,Formatting.Indented);
 
-    public void Load()
-    {
+        var savesPath = Application.persistentDataPath + Consts.savesPath;
 
+        if (!File.Exists(savesPath))
+        {
+             File.Create(savesPath);
+        }
+
+        File.WriteAllText(savesPath, json);
     }
 }

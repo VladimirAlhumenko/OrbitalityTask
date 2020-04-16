@@ -7,9 +7,9 @@ using UnityEngine;
 public class ShootingManager : Singleton<ShootingManager>
 {
     [SerializeField]
-    private Models.Rocket[] _rockets;
+    private Models.RocketModel[] _rockets;
 
-    private Dictionary<Planet,Models.Rocket> _shootingPlanets = new Dictionary<Planet, Models.Rocket>();
+    private Dictionary<Planet,Models.RocketModel> _shootingPlanets = new Dictionary<Planet, Models.RocketModel>();
 
     private Planet _selectedPlanet;
 
@@ -96,7 +96,7 @@ public class ShootingManager : Singleton<ShootingManager>
         return vel * dir.normalized;
     }
 
-    private void Shoot(Vector3 planetPosition,Transform targetPlanetPosition,Models.Rocket rocketProperties)
+    private void Shoot(Vector3 planetPosition,Transform targetPlanetPosition,Models.RocketModel rocketProperties)
     {
         var rocket = Instantiate(_rocketPrefab, planetPosition, Quaternion.identity);
         //    rocket.GetComponent<Rigidbody>().velocity = CalculateParabolTrajectory(planetPosition,targetPlanetPosition, shootAngle);
@@ -118,7 +118,7 @@ public class ShootingManager : Singleton<ShootingManager>
         _selectedPlanet = arg0[0] as Planet;
     }
 
-    private Models.Rocket GetRandomRocket()
+    private Models.RocketModel GetRandomRocket()
     {
         return _rockets[UnityEngine.Random.Range(0, _rockets.Length)];
     }
